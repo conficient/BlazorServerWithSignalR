@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BlazorServerWithSignalR
 {
+    /// <summary>
+    /// A simple 'chat' service that accepts messages and broadcasts them to any listener
+    /// </summary>
     public class TalkService
     {
         public TalkService()
