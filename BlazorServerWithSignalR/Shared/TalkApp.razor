@@ -1,0 +1,45 @@
+﻿
+@inject TalkService service
+
+<p>Talk App started</p>
+
+<p>Send a message: <input type="text"@bind="@message" />
+    <button class="btn btn-sm btn-primary" @onclick="Send"  >Send</button>
+    </p>
+
+@foreach (var m in messages)
+{
+    <p>@m</p>
+}
+@code {
+    string message;
+
+    async Task Send()
+    {
+        if(!string.IsNullOrWhiteSpace(message))
+            await service.SendAsync(message);
+        message = string.Empty;
+    }
+
+    List<string> messages;
+
+    protected override void OnParametersSet()
+    {
+        // load history
+        messages = service.GetHistory().ToList();
+
+        // register for updates
+        service.OnChange += ChangeHandler;
+
+
+        base.OnParametersSet();
+    }
+
+    protected void ChangeHandler(string message)
+    {
+        messages.Add(message);
+        InvokeAsync(StateHasChanged);
+    }
+
+
+}
